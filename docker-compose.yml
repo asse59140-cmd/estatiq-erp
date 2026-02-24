@@ -1,0 +1,25 @@
+services:
+  erp_app:
+    image: bitnami/laravel:latest
+    container_name: erp_app
+    tty: true
+    command: tail -f /dev/null
+    ports:
+      - "8080:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DB_HOST=erp_db
+      - DB_PORT=3306
+      - DB_DATABASE=estatiq_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+
+  erp_db:
+    image: mysql:8.0
+    container_name: erp_db
+    environment:
+      - MYSQL_DATABASE=estatiq_db
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
