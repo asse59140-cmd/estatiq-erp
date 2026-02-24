@@ -13,14 +13,20 @@ return new class extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name'); // Prénom
-            $table->string('last_name');  // Nom
-            $table->string('email')->unique();
+            
+            // Les colonnes exactes que ton formulaire attend
+            $table->string('full_name'); 
+            $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->string('id_card_number')->nullable(); // N° de pièce d'identité
-            $table->string('status')->default('Actif');   // Actif, Partant, Ancien
-            $table->date('birth_date')->nullable();       // Date de naissance
-            $table->text('notes')->nullable();            // Commentaires éventuels
+            
+            // La liaison avec la propriété (villa/appartement)
+            $table->foreignId('property_id')->nullable()->constrained()->cascadeOnDelete();
+            
+            // Les dates et documents du bail
+            $table->date('lease_start')->nullable();
+            $table->date('lease_end')->nullable();
+            $table->string('lease_document')->nullable();
+            
             $table->timestamps();
         });
     }
