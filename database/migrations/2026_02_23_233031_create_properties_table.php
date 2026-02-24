@@ -16,11 +16,14 @@ return new class extends Migration
             $table->string('title');
             $table->string('address');
             $table->decimal('price', 15, 2);
-            $table->string('type'); // Changé en string pour plus de souplesse
-            $table->string('status')->default('Disponible'); // Changé en string
+            $table->string('type');
+            $table->string('status')->default('Disponible');
             $table->text('description')->nullable();
-            $table->json('images')->nullable(); // Ajouté au cas où tu veux mettre des photos
+            $table->json('images')->nullable();
+            
+            // La solution anti-crash : on crée la colonne sans forcer la contrainte stricte
             $table->unsignedBigInteger('owner_id')->nullable();
+            
             $table->timestamps();
         });
     }
