@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('status')->default('Disponible'); // Changé en string
             $table->text('description')->nullable();
             $table->json('images')->nullable(); // Ajouté au cas où tu veux mettre des photos
-            $table->foreignId('owner_id')->nullable()->constrained()->onDelete('cascade'); // Ajouté pour lier aux propriétaires
+            $table->unsignedBigInteger('owner_id')->nullable();
             $table->timestamps();
         });
     }
