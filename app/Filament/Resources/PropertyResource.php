@@ -120,3 +120,8 @@ class PropertyResource extends Resource
     {
         return [
             'index' => Pages\ListProperties::route('/'),
+            'create' => Pages\CreateProperty::route('/create'),
+            'edit' => Pages\EditProperty::route('/{record}/edit'),
+        ];
+    }
+}
