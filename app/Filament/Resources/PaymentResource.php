@@ -10,7 +10,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Blade;
 
 class PaymentResource extends Resource
 {
@@ -33,12 +32,12 @@ class PaymentResource extends Resource
                             ->preload()
                             ->required(),
                         Forms\Components\TextInput::make('amount')
-                            ->label('Montant encaissé')
+                            ->label('Montant attendu/encaissé')
                             ->numeric()
                             ->prefix('€')
                             ->required(),
                         Forms\Components\DatePicker::make('payment_date')
-                            ->label('Date de règlement')
+                            ->label('Date de règlement (ou d\'échéance)')
                             ->default(now())
                             ->required(),
                         Forms\Components\Select::make('method')
@@ -48,6 +47,16 @@ class PaymentResource extends Resource
                                 'especes' => 'Espèces',
                                 'cheque' => 'Chèque',
                             ])
+                            ->required(),
+                        // LE VOICI ! Le champ manquant pour le statut :
+                        Forms\Components\Select::make('status')
+                            ->label('Statut du paiement')
+                            ->options([
+                                'paid' => 'Payé',
+                                'pending' => 'En attente',
+                                'late' => 'En retard',
+                            ])
+                            ->default('paid')
                             ->required(),
                     ])->columns(2),
             ]);
@@ -69,14 +78,19 @@ class PaymentResource extends Resource
                     ->label('Date')
                     ->date('d/m/Y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('method')
-                    ->label('Méthode')
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Statut')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'virement' => 'info',
-                        'especes' => 'success',
-                        'cheque' => 'warning',
-                        default => 'gray',
+                    ->colors([
+                        'success' => 'paid',
+                        'warning' => 'pending',
+                        'danger' => 'late',
+                    ])
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'paid' => 'Payé',
+                        'pending' => 'En attente',
+                        'late' => 'En retard',
+                        default => $state,
                     }),
             ])
             ->filters([
@@ -85,7 +99,7 @@ class PaymentResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 
-                // ACTION POUR LE PDF (BIEN FERMÉE)
+                // ACTION POUR LE PDF
                 Tables\Actions\Action::make('downloadPdf')
                     ->label('Quittance')
                     ->icon('heroicon-o-document-arrow-down')
