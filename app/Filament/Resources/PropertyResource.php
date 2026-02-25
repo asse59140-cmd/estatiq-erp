@@ -42,41 +42,30 @@ class PropertyResource extends Resource
                             ->label('Propriétaire')
                             ->relationship('owner', 'full_name')
                             ->searchable()
-                            ->preload()
-                            ->required(),
-                        Forms\Components\Select::make('type')
-                            ->label('Type de bien')
-                            ->options([
-                                'villa' => 'Villa',
-                                'appartement' => 'Appartement',
-                                'bureau' => 'Bureau',
-                            ])->required(),
+                            ->preload(),
                         Forms\Components\TextInput::make('price')
-                            ->label('Loyer mensuel')
+                            ->label('Loyer')
                             ->numeric()
                             ->prefix('€')
                             ->required(),
+                        Forms\Components\TextInput::make('type')
+                            ->label('Type de bien (ex: Villa, Appartement)')
+                            ->required(),
                         Forms\Components\Select::make('status')
-                            ->label('État')
+                            ->label('Statut')
                             ->options([
                                 'available' => 'Disponible',
                                 'rented' => 'Loué',
                                 'maintenance' => 'En travaux',
-                            ])->default('available'),
-                    ])->columnSpan(1),
-
-                Forms\Components\Section::make('Galerie Photos')
-                    ->schema([
+                            ])
+                            ->default('available')
+                            ->required(),
                         Forms\Components\FileUpload::make('images')
-                            ->label('Photos du bien')
-                            ->image()
+                            ->label('Photos')
                             ->multiple()
-                            ->reorderable()
-                            ->appendFiles()
                             ->directory('properties')
-                            ->visibility('public')
                             ->columnSpanFull(),
-                    ])->columnSpanFull(),
+                    ])->columnSpan(1),
             ])->columns(3);
     }
 
@@ -84,22 +73,19 @@ class PropertyResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('images')
-                    ->label('Photo')
-                    ->circular()
-                    ->stacked()
-                    ->limit(3),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Nom')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('owner.full_name')
-                    ->label('Propriétaire'),
+                    ->label('Propriétaire')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Loyer')
-                    ->money('eur'),
-                Tables\Columns\BadgeColumn::make('status')
+                    ->money('eur')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
                     ->label('Statut')
+                    ->badge()
                     ->colors([
                         'success' => 'available',
                         'warning' => 'rented',
@@ -134,8 +120,3 @@ class PropertyResource extends Resource
     {
         return [
             'index' => Pages\ListProperties::route('/'),
-            'create' => Pages\CreateProperty::route('/create'),
-            'edit' => Pages\EditProperty::route('/{record}/edit'),
-        ];
-    }
-}
