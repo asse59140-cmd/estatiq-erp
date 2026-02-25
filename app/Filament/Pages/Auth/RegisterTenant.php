@@ -23,7 +23,8 @@ class RegisterTenant extends RegisterTenant
                     ->label('Nom de l\'agence')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn ($state, set) => set('slug', Str::slug($state))),
+                    // La correction est ici : on ajoute le $ devant set
+                    ->afterStateUpdated(fn ($state, $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
                     ->label('Identifiant unique (URL)')
                     ->required()
