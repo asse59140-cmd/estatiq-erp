@@ -5,10 +5,10 @@ namespace App\Filament\Pages\Auth;
 use App\Models\Agency;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Pages\Tenancy\RegisterTenant;
+use Filament\Pages\Tenancy\RegisterTenant as BaseRegisterTenant; // On lui donne un surnom
 use Illuminate\Support\Str;
 
-class RegisterTenant extends RegisterTenant
+class RegisterTenant extends BaseRegisterTenant // On hérite du "surnom"
 {
     public static function getLabel(): string
     {
@@ -23,7 +23,6 @@ class RegisterTenant extends RegisterTenant
                     ->label('Nom de l\'agence')
                     ->required()
                     ->live(onBlur: true)
-                    // La correction est ici : on ajoute le $ devant set
                     ->afterStateUpdated(fn ($state, $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
                     ->label('Identifiant unique (URL)')
