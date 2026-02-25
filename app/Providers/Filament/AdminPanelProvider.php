@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Models\Agency;
+use App\Filament\Pages\Auth\RegisterTenant; // On utilise notre nouvelle page ici
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -28,10 +29,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            // --- ON ACTIVE LE MULTI-TENANCY ICI ---
+            // Configuration Multi-Agence
             ->tenant(Agency::class, slugAttribute: 'slug')
-            ->tenantRegistration(Pages\Auth\RegisterTenant::class) 
-            // --------------------------------------
+            ->tenantRegistration(RegisterTenant::class) 
             ->colors([
                 'primary' => Color::Amber,
             ])
