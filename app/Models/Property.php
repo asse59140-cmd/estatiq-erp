@@ -2,33 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Property extends Model
 {
-    use HasFactory;
+    // On ajoute agency_id dans les champs autorisés
+    protected $fillable = ['title', 'address', 'description', 'price', 'type', 'status', 'owner_id', 'agency_id'];
 
-    protected $fillable = [
-        'title',
-        'address',
-        'price',
-        'type',
-        'status',
-        'description',
-        'owner_id',
-        'images', // Ajouté proprement ici
-    ];
-
-    protected $casts = [
-        'images' => 'array', // Indispensable pour stocker plusieurs photos
-    ];
-
-    /**
-     * Une propriété appartient à un propriétaire.
-     */
-    public function owner()
-    {
-        return $this->belongsTo(Owner::class);
-    }
+    public function owner(): BelongsTo { return $this->belongsTo(Owner::class); }
+    
+    // Le lien vers l'agence
+    public function agency(): BelongsTo { return $this->belongsTo(Agency::class); }
 }

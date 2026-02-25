@@ -2,22 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Owner extends Model
 {
-    use HasFactory;
+    protected $fillable = ['full_name', 'email', 'phone', 'agency_id'];
 
-    protected $fillable = [
-        'full_name', 
-        'email', 
-        'phone', 
-        'address'
-    ];
-
-    public function properties()
-    {
-        return $this->hasMany(Property::class);
-    }
+    public function agency(): BelongsTo { return $this->belongsTo(Agency::class); }
 }

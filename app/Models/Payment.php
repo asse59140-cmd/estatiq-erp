@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
-    use HasFactory;
+    protected $fillable = ['tenant_id', 'amount', 'payment_date', 'method', 'status', 'agency_id'];
 
-    protected $fillable = ['tenant_id', 'amount', 'payment_date', 'method', 'status'];
-
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
+    public function tenant(): BelongsTo { return $this->belongsTo(Tenant::class); }
+    public function agency(): BelongsTo { return $this->belongsTo(Agency::class); }
 }
