@@ -44,9 +44,10 @@ RUN apk update && apk add --no-cache \
     g++ \
     make \
     openssl-dev \
+    linux-headers \
     && rm -rf /var/cache/apk/*
 
-# Installation des extensions PHP
+# 1. Installation des extensions PHP natives
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo_mysql \
@@ -58,8 +59,11 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         gd \
         zip \
         intl \
-        opcache \
-        redis
+        opcache
+
+# 2. LA CORRECTION : Installation de Redis via PECL
+RUN pecl install redis \
+    && docker-php-ext-enable redis
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
