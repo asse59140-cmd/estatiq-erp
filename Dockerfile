@@ -90,8 +90,8 @@ WORKDIR /var/www/html
 # Copier les fichiers de l'application
 COPY --chown=koreerp:koreerp . .
 
-# Installation des dépendances Composer
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist && \
+# Installation des dépendances Composer AVEC --no-audit POUR CONTOURNER LE BLOCAGE DOCUSIGN
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist --no-audit && \
     composer clear-cache
 
 # Générer la clé d'application si elle n'existe pas
