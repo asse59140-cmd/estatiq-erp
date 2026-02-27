@@ -1,31 +1,38 @@
 {
-    "name": "laravel/laravel",
+    "name": "kore/kore-erp",
+    "description": "KORE ERP - Real Estate Intelligence Platform",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
+    "keywords": ["kore", "erp", "real-estate", "saas", "multi-tenant", "laravel", "filament"],
+    "license": "proprietary",
     "require": {
         "php": "^8.2",
-        "ext-intl": "*",
-        "barryvdh/laravel-dompdf": "^3.0",
-        "filament/filament": "^3.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.9"
+        "filament/filament": "^3.2",
+        "stripe/stripe-php": "^13.0",
+        "docusign/esign-client": "^6.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "predis/predis": "^2.2",
+        "google/cloud-ai-platform": "^1.0",
+        "openai-php/client": "^0.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.0.1"
+        "nunomaduro/collision": "^8.0",
+        "phpunit/phpunit": "^10.5",
+        "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/arabic_helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -35,8 +42,7 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi",
-            "@php artisan filament:upgrade"
+            "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
@@ -45,9 +51,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
+            "@php artisan key:generate --ansi"
         ]
     },
     "extra": {
